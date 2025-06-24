@@ -1,1 +1,50 @@
-# carbon-lca-datacenter
+# 🖥️ Data Center LCA Modeling Tool
+
+This project estimates the **lifecycle carbon footprint (CI score)** of data center hardware under different replacement scenarios (e.g., 3-year vs. 5-year refresh cycles). It combines LCA expertise with Python and SQL to model and visualize sustainability trade-offs.
+
+## 🔧 Features
+
+- ✅ CI (Carbon Intensity) calculator using Python
+- ✅ SQL-based lifecycle inventory for emission factors
+- ✅ Visualizations of cumulative carbon emissions over time
+- ✅ Supports scenario comparisons (refresh every 3 vs 5 years)
+
+## 🚀 Getting Started
+
+1. Clone the repository
+
+```bash
+git clone https://github.com/YOUR-USERNAME/YOUR-REPO-NAME.git
+cd YOUR-REPO-NAME
+
+2. Install dependencies
+
+bash
+Copy
+Edit
+pip install -r requirements.txt
+Run the model
+
+bash
+Copy
+Edit
+python src/ci_calculator.py
+Open the Jupyter notebook demo
+
+bash
+Copy
+Edit
+jupyter notebook notebooks/lca_demo.ipynb
+📁 Folder Structure
+pgsql
+Copy
+Edit
+/data        → Input CSVs (e.g., hardware, emission factors)
+/sql         → SQL schema and query files
+/src         → Python modules for calculations
+/notebooks   → Jupyter notebooks with demo analysis
+🧠 Background
+This tool was developed by a Ph.D. researcher in Environmental Engineering with a deep background in lifecycle assessment (LCA), carbon intensity modeling, and sustainability strategy. It is designed to help data center teams and sustainability engineers evaluate environmental impacts in a transparent and reproducible way.
+
+📬 Contact
+Feel free to connect via LinkedIn or email: your.email@example.com
