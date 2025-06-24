@@ -1,6 +1,6 @@
-# src/ci_calculator.py
-
 '''python
+
+# src/ci_calculator.py
 
 import pandas as pd
 
