@@ -3,6 +3,14 @@
 This project estimates the **lifecycle carbon footprint (CI score)** of data center hardware under different replacement scenarios (e.g., 3-year vs. 5-year refresh cycles). 
 It combines LCA expertise with Python and SQL to model and visualize sustainability trade-offs.
 
+## 🧭 Project Modules
+
+### 📦 Data Center CI Calculator
+Located in `/src/`, this module estimates the lifecycle CI score for hardware replacement scenarios in cloud infrastructure.
+
+### ♻️ Biogas Lifecycle Calculator
+Located in `/biogas_lca/`, this submodule estimates the carbon intensity of dairy manure-based biogas pathways under different conditions (e.g., lagoon covers, digesters, RNG conversion).
+
 ## 🔧 Features
 
 - ✅ CI (Carbon Intensity) calculator using Python
