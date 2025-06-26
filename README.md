@@ -1,58 +1,36 @@
-# 🖥️ Data Center LCA Modeling Tool
+# 🧠 AI-Powered Data Center Lifecycle Emissions Model
 
-This project estimates the **lifecycle carbon footprint (CI score)** of data center hardware under different replacement scenarios (e.g., 3-year vs. 5-year refresh cycles). 
-It combines LCA expertise with Python and SQL to model and visualize sustainability trade-offs.
+This open-source Python model simulates the **energy usage**, **cooling efficiency**, and **carbon footprint** of a high-performance data center using **NVIDIA AI chips** (e.g., A100). It calculates **Scope 1–3 emissions**, supporting hardware upgrade scenarios and cooling improvements — with assumptions grounded in academic and industry literature.
 
-## 🧭 Project Modules
+---
 
-### 📦 Data Center CI Calculator
-Located in `/src/`, this module estimates the lifecycle CI score for hardware replacement scenarios in cloud infrastructure.
+## 📘 Project Overview
 
-### ♻️ Biogas Lifecycle Calculator
-Located in `/biogas_lca/`, this submodule estimates the carbon intensity of dairy manure-based biogas pathways under different conditions (e.g., lagoon covers, digesters, RNG conversion).
+This simulation estimates the lifecycle impacts of an AI cluster powered by NVIDIA chips, including:
 
-## 🔧 Features
+- GPU power draw and energy consumption
+- Cooling and PUE (Power Usage Effectiveness)
+- Scope 2 emissions (electricity-related)
+- Scope 3 emissions (hardware manufacturing)
+- Upgrade cycles and embodied carbon
 
-- ✅ CI (Carbon Intensity) calculator using Python
-- ✅ SQL-based lifecycle inventory for emission factors
-- ✅ Visualizations of cumulative carbon emissions over time
-- ✅ Supports scenario comparisons (refresh every 3 vs 5 years)
-
-## 🚀 Getting Started
-
-1. Clone the repository
-
-```bash
-git clone https://github.com/tying1/carbon-lca-datacenter.git
-cd carbon-lca-datacenter 
-```
-
-2. Install dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
-3. Run the model
-
-```bash
-
-python src/ci_calculator.py
-```
-4. Open the Jupyter notebook demo
-
-```bash
-
-jupyter notebook notebooks/lca_demo.ipynb
-```
+This project is inspired by real data from Meta's Research SuperCluster (RSC), NVIDIA's energy reports, and academic LCA benchmarks.
 
 ## 📁 Folder Structure
 ```pgsql
 
-/data        → Input CSVs (e.g., hardware, emission factors)
+/data        → Sample input CSV data, like emissions/chips etc.
 /sql         → SQL schema and query files
 /src         → Python modules for calculations
 /notebooks   → Jupyter notebooks with demo analysis
+
+## ⚙️ How to Run
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/tying1/carbonp-lca-datacenter.git
+cd ai-datacenter-lca
 ```
 
 ## 🧠 Background
