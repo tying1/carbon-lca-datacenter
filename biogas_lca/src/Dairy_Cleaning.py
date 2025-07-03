@@ -10,13 +10,13 @@ log_file_path = r"C:\Users\xxx\change_log.txt"
 df = pd.read_excel(input_path, engine="openpyxl")
 df_original = df.copy()  # For logging original vs. cleaned
 
+# prepare data format change
 if "Time" in df.columns:
     df["Time"] = pd.to_datetime(df["Time"], errors="coerce")
     df["DateTime"] = df["Time"]  # Create a DateTime column that retains both date and time
 else:
     df.rename(columns={df.columns[0]: "DateTime"}, inplace=True)
-
-# Ensure DateTime column is properly formatted
+    
 df["DateTime"] = pd.to_datetime(df["DateTime"], errors="coerce")
 
 # Debug: Check the DateTime column
@@ -43,7 +43,7 @@ forward_fill_changes   = {col: set() for col in flow_columns}
 no_decreasing_changes  = {col: set() for col in flow_columns}
 methane_zero_replaced  = {col: set() for col in methane_columns}
 
-# Cleaning Data
+# Cleaning Data with forward fill, no decreasing, fill remaining NaN with 0. 
 for col in flow_columns:
     df[col] = pd.to_numeric(df[col], errors="coerce")
     
@@ -109,7 +109,7 @@ for col in methane_columns:
 for col in methane_columns:
     df[col] = pd.to_numeric(df[col], errors="coerce") / 100
 
-# dynamic naming
+# dynamic calculation change for farms with recirculation
 recirc_farms = {
     "02_xxx",
     "01_xxx",
