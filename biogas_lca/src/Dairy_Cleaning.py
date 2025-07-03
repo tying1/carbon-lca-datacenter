@@ -3,21 +3,13 @@ from openpyxl import load_workbook
 from openpyxl.styles import PatternFill
 from openpyxl.worksheet.table import Table, TableStyleInfo
 
-# 1) PATHS
-# ---------------------------------------------------------------------
 input_path = r"C:\Users\XXX\DAIRY DATA.xlsx"
 output_path = r"C:\Users\xxx\DAIRY DATA_cleaned.xlsx" 
 log_file_path = r"C:\Users\xxx\change_log.txt"
 
-# ---------------------------------------------------------------------
-# 2) READ INPUT EXCEL
-# ---------------------------------------------------------------------
 df = pd.read_excel(input_path, engine="openpyxl")
 df_original = df.copy()  # For logging original vs. cleaned
 
-# ---------------------------------------------------------------------
-# 3) PREPARE DATE COLUMN (IF NEEDED) - Keep both Date and Time
-# ---------------------------------------------------------------------
 if "Time" in df.columns:
     df["Time"] = pd.to_datetime(df["Time"], errors="coerce")
     df["DateTime"] = df["Time"]  # Create a DateTime column that retains both date and time
@@ -43,23 +35,15 @@ print(df[["DateTime", "Date", "Time"]].head())
 columns_order = ['Date', 'Time'] + [col for col in df.columns if col not in ['Date', 'Time']]
 df = df[columns_order]
 
-# ---------------------------------------------------------------------
-# 4) IDENTIFY COLUMN TYPES
-# ---------------------------------------------------------------------
 flow_columns = [c for c in df.columns if "TF_TOTAL_VOLUME_ACCUM" in c or "TF_TOTAL_RECIRC_ACCUM" in c]
 methane_columns = [c for c in df.columns if "TF_METHANE" in c]
 
-# ---------------------------------------------------------------------
-# 5) SET UP DICTIONARIES TO TRACK CHANGES
-# ---------------------------------------------------------------------
 negative_value_changes = {col: set() for col in flow_columns}
 forward_fill_changes   = {col: set() for col in flow_columns}
 no_decreasing_changes  = {col: set() for col in flow_columns}
 methane_zero_replaced  = {col: set() for col in methane_columns}
 
-# ---------------------------------------------------------------------
-# 6) CLEAN FLOW COLUMNS (FORWARD FILL, NO-DECREASING, FILL REMAINING NaN WITH 0)
-# ---------------------------------------------------------------------
+# Cleaning Data
 for col in flow_columns:
     df[col] = pd.to_numeric(df[col], errors="coerce")
     
@@ -89,9 +73,8 @@ for col in flow_columns:
             df.at[i, col] = 0
             negative_value_changes[col].add(i)
 
-# ---------------------------------------------------------------------
-# 7) INTELLIGENT METHANE REPLACEMENT (REPLACE 0 OR NaN WITH DAILY AVG)
-# ---------------------------------------------------------------------
+
+# REPLACE 0 OR NaN WITH DAILY AVG
 df["DateTime"] = pd.to_datetime(df["DateTime"], errors="coerce")
 unique_dates = sorted(df["DateTime"].dropna().unique())
 
@@ -126,9 +109,7 @@ for col in methane_columns:
 for col in methane_columns:
     df[col] = pd.to_numeric(df[col], errors="coerce") / 100
 
-# ---------------------------------------------------------------------
-# 8) DYNAMIC NET MSCF CALCULATION (TWO METHODS)
-# ---------------------------------------------------------------------
+# dynamic naming
 recirc_farms = {
     "02_xxx",
     "01_xxx",
@@ -173,9 +154,8 @@ while i + 2 < num_cols:
     else:
         i += 1
 
-# ---------------------------------------------------------------------
-# 9) WRITE OUTPUT TO EXCEL (TWO SHEETS)
-# ---------------------------------------------------------------------
+# Output to Excel
+
 with pd.ExcelWriter(output_path, engine="openpyxl") as writer:
     df_result.to_excel(writer, sheet_name="NET MSCF", index=False)
     
@@ -186,9 +166,8 @@ with pd.ExcelWriter(output_path, engine="openpyxl") as writer:
     # Write the reordered DataFrame to the "Cleaned Data" sheet
     df.to_excel(writer, sheet_name="Cleaned Data", index=False)
 
-# ---------------------------------------------------------------------
-# 10) CONVERT SHEETS TO EXCEL TABLES
-# ---------------------------------------------------------------------
+
+# Convet Sheet to Excel Table
 wb = load_workbook(output_path)
 
 # Convert "NET MSCF" sheet to a table
@@ -212,9 +191,9 @@ ws_cleaned.add_table(table_cleaned)
 # Save the workbook
 wb.save(output_path)
 
-# ---------------------------------------------------------------------
-# 11) APPLY EXCEL HIGHLIGHTING
-# ---------------------------------------------------------------------
+
+# Excel colored changed cell for different catagories
+
 wb = load_workbook(output_path)
 ws_cleaned = wb["Cleaned Data"]
 
@@ -250,9 +229,8 @@ for col in methane_columns:
 
 wb.save(output_path)
 
-# ---------------------------------------------------------------------
-# 12) LOG ALL CHANGES TO A TEXT FILE
-# ---------------------------------------------------------------------
+
+# LOG ALL CHANGES TO A TEXT FILE
 with open(log_file_path, "w", encoding="utf-8") as log_file:
     log_file.write("==== Negative or Missing Flow Values Replaced with 0 (Blue) ====\n")
     for col in flow_columns:
